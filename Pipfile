@@ -7,7 +7,6 @@ verify_ssl = true
 
 [packages]
 django = "*"
-jinja2 = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.7.2"
