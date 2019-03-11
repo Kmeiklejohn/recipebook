@@ -29,21 +29,23 @@ def add_recipe(request):
    
     if request.method == 'POST':
         form = Add_Recipe(request.POST)
-        
         if form.is_valid():
             data = form.cleaned_data
             Recipe.objects.create(
                 title = data['title'],
                 description = data['description'],
                 instructions = data['instructions'],
-                author = request.user.author,
+                author = data['name'],
                 time_required = data['time_required']
-            )
+                )
             return render(request, 'updated.html')
     else:
         form = Add_Recipe()
-
+        if not request.user.is_staff:  
+            form.fields['author'].queryset= Author.objects.filter(user=request.user)
     return render(request,'add_recipe.html', {'form': form} )
+    
+        
 
 @login_required()
 @staff_member_required(login_url='error')
@@ -55,10 +57,11 @@ def add_author(request):
         form = Add_Author(request.POST)
         if form.is_valid():
             data = form.cleaned_data
+            new_user = User.objects.create_user(username=data['name'])
             Author.objects.create(
                 name = data['name'],
                 bio = data['bio'],
-                user = data['user']
+                user = new_user
             )
             return render(request, 'updated.html')
     else:
