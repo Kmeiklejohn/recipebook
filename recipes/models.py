@@ -7,7 +7,7 @@ class Author(models.Model):
     
     name = models.TextField()
     bio = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
