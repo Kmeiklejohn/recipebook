@@ -49,10 +49,11 @@ def add_author(request):
         
         if form.is_valid():
             data = form.cleaned_data
+            new_user = User.objects.create_user(username=data['name'])
             Author.objects.create(
                 name = data['name'],
                 bio = data['bio'],
-                user = data['user']
+                user = new_user
             )
             return render(request, 'updated.html')
     else:
